@@ -1,6 +1,5 @@
 const express = require('express');
 const mongo = require('mongoose');
-var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
@@ -10,7 +9,6 @@ const saltRounds = 10;
 app.set('view engine', 'pug');
 app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 app.use(cookieSession({
     secret: 'holaasdljaslkjdsalksadlkjsadlk',  
@@ -32,17 +30,22 @@ const requireUser = async (req, res, next) => {
     const userId = req.session.userId;
     if (userId) {
       const user = await User.findOne({ _id: userId });
-      res.locals.user = user;
+      //res.locals.user = user;
       next();
     } else {
       return res.redirect("/login");
     }
   }
-
-app.get('/login', (req, res)=>{
+const isLoggedIn = (req, res, next)=>{
     if(req.session.userId){
         return res.redirect('/');
     }
+    else{
+        next();
+    }
+}
+
+app.get('/login', isLoggedIn, (req, res)=>{
     res.render('form', {error: null});        
 });
 
@@ -55,10 +58,7 @@ app.get('/', requireUser, async (req, res)=>{
     res.render("users", { users: users }); 
 });
 
-app.get('/register', (req,res)=>{
-    if(req.session.userId){
-        return res.redirect('/');
-    }
+app.get('/register', isLoggedIn,(req,res)=>{
     res.render('form-register');
 });
 app.post('/register',async (req,res)=>{
