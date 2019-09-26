@@ -1,0 +1,15 @@
+html
+  head
+    title usuarios
+  body
+    table
+      thead
+        tr
+          th nombre
+          th correo
+      tbody
+        each user in users
+          tr
+            td= user.name
+            td= user.email
+  a(href="/logout") logout

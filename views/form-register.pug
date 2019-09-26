@@ -1,0 +1,21 @@
+doctype html
+html(lang='en')
+  head
+    title form
+  body
+  p= message
+    form(action='/register', method='post')
+      |   Correo:
+      br
+      input(type='email', required, name='email', id='email', placeholder='Correo')
+      br
+      |   nombre
+      br
+      input(type="text", name="name", id="name", placeholder="nombre")
+      br
+      |   contraseña
+      br
+      input(type='password', required, name='password', id='password', placeholder='contraseña')
+      br
+      input(type='submit', value='Enviar')
+    a(href='/login') login
