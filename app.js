@@ -1,15 +1,14 @@
 const express = require('express');
 const mongo = require('mongoose');
 var cookieSession = require('cookie-session');
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
 
 const app = express();
 const saltRounds = 10;
 app.set('view engine', 'pug');
 app.set('views', 'views');
-app.set('trust proxy', 1);
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieSession({
     secret: 'holaasdljaslkjdsalksadlkjsadlk',  
@@ -24,7 +23,7 @@ var schema = mongo.Schema({
 });
 
 var User = mongo.model('User', schema);
-mongo.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/mongo-1', {useNewUrlParser:true,  useUnifiedTopology: true });
+mongo.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/mongo-autenticar', {useNewUrlParser:true,  useUnifiedTopology: true });
 mongo.connection.on('error', (e)=>{console.error(e)});
 
 const requireUser = async (req, res, next) => {
